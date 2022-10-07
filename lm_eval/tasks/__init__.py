@@ -33,6 +33,8 @@ from . import tydiqa
 from . import wino_bias
 from . import wmt
 from . import xquad
+from . import xnli
+from . import xlsum
 
 
 logger = logging.getLogger(__name__)
@@ -200,6 +202,12 @@ TASK_REGISTRY = {
     # TyDi QA
     "tydiqa_primary": tydiqa.TyDiQAPrimaryClassification,
     "tydiqa_secondary": tydiqa.TyDiQAGoldPGeneration,
+
+    # XNLI
+    **xnli.construct_tasks(),
+
+    **xlsum.construct_tasks(),
+
     #######################################################
     # TODO: Not Yet Available in `promptsource/eval-hackathon`
     ########################################################
