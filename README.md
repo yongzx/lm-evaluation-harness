@@ -3,6 +3,51 @@
 ![](https://github.com/EleutherAI/lm-evaluation-harness/workflows/Build/badge.svg)
 [![codecov](https://codecov.io/gh/EleutherAI/lm-evaluation-harness/branch/master/graph/badge.svg?token=JSG3O2427J)](https://codecov.io/gh/EleutherAI/lm-evaluation-harness)
 
+## Multilingual Modeling
+
+### XNLI (Example shown using 3 templates)
+**Baseline or Model-Based (BitFit, FISH Mask, etc.)**
+```
+python3 main.py \
+--model_api_name "hf-causal" \
+--model_args pretrained="bigscience/bloom-560m" \
+--task_name "xnli_en" \
+--template_names "take the following as truth","does this imply","GPT-3 style" \
+--device "cpu"
+```
+
+**Using Adapters (MAD-X, Pfeiffer, IA3, LoRA, etc.)**
+```
+python3 main.py \
+--model_api_name "hf-causal" \
+--model_args pretrained="bigscience/bloom-560m",lang_adapter_dir="/users/zyong2/data/zyong2/bigscience/data/processed/024/bloom350m_az_ia3_100000samples_-1vocab_original-frozen/oscar_ia3_az" \
+--task_name "xnli_en" \
+--template_names "take the following as truth","does this imply","GPT-3 style" \
+--device "cpu"
+```
+
+### XLSUM (Example shown using 2 templates)
+**Baseline or Model-Based (BitFit, FISH Mask, etc.)**
+```
+python3 main.py \
+--model_api_name "hf-causal" \
+--model_args pretrained="bigscience/bloom-560m" \
+--task_name "xlsum_azerbaijani" \
+--template_names "write_abstract_az","rephrase_az" \
+--device cpu
+```
+
+**Using Adapters (MAD-X, Pfeiffer, IA3, LoRA, etc.)**
+```
+python3 main.py \
+--model_api_name "hf-causal" \
+--model_args pretrained="bigscience/bloom-560m",lang_adapter_dir="/users/zyong2/data/zyong2/bigscience/data/processed/024/bloom-350m_az_ia3_100000samples_-1vocab_original-frozen/oscar_ia3_az" \
+--task_name "xlsum_azerbaijani" \
+--template_names "write_abstract_az","rephrase_az" \
+--device cpu
+```
+
+
 ## Overview
 
 This project provides a unified framework to test causal (GPT-2, GPT-3, GPTNeo, etc) and seq2seq (T5, T0) language models via prompt evaluation.
