@@ -63,6 +63,7 @@ class HuggingFaceAutoLM(TokenLM):
     def __init__(
         self,
         pretrained: str,
+        lang_adapter_dir: Optional[str] = None,
         tokenizer: Optional[str] = None,
         subfolder: Optional[str] = None,
         revision: Optional[str] = "main",
@@ -168,6 +169,7 @@ class HuggingFaceAutoLM(TokenLM):
             )
         self.model = self._create_auto_model(
             pretrained=pretrained,
+            lang_adapter_dir=lang_adapter_dir,
             revision=revision,
             subfolder=subfolder,
             torch_dtype=_get_dtype(dtype, self._config),
@@ -189,6 +191,7 @@ class HuggingFaceAutoLM(TokenLM):
         self,
         *,
         pretrained: str,
+        lang_adapter_dir: str,
         revision: str,
         subfolder: str,
         device_map: Optional[Union[str, _DeviceMapping]] = None,
@@ -200,11 +203,18 @@ class HuggingFaceAutoLM(TokenLM):
         model = self.AUTO_MODEL_CLASS.from_pretrained(
             pretrained,
             revision=revision + ("/" + subfolder if subfolder is not None else ""),
-            device_map=device_map,
-            max_memory=max_memory,
-            offload_folder=offload_folder,
-            torch_dtype=torch_dtype,
+            ### commenting out because the transformers version of adapter-transformers doesn't support
+            # device_map=device_map,
+            # max_memory=max_memory,
+            # offload_folder=offload_folder,
+            # torch_dtype=torch_dtype,
         )
+
+        ### add adapters
+        if lang_adapter_dir:
+            print("❗️ Loaded language adapter:", lang_adapter_dir.split("/")[-1])
+            lang_adapter_name = model.load_adapter(lang_adapter_dir)
+            model.set_active_adapters(lang_adapter_name)
         return model
 
     def _create_auto_tokenizer(

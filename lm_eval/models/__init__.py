@@ -43,7 +43,7 @@ def get_model(model_api_name: str, **model_kwargs) -> LM:
 
 def get_model_from_args_string(
     model_api_name: str,
-    model_args: str,
+    model_args: str, # lang_adapter_dir should be in model_args
     additional_config: Optional[Mapping[str, str]] = None,
 ) -> LM:
     """Returns a language model from the specified model API, instantiated with
@@ -61,7 +61,7 @@ def get_model_from_args_string(
     """
     additional_config = {} if additional_config is None else additional_config
     additional_args = {k: v for k, v in additional_config.items() if v is not None}
-    kwargs = lm_eval.api.utils.parse_cli_args_string(model_args)
+    kwargs = lm_eval.api.utils.parse_cli_args_string(model_args) # will process lang_adapter_dir
     kwargs.update(additional_args)
     return get_model(model_api_name, **kwargs)
 
