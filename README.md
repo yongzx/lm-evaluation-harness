@@ -1,53 +1,27 @@
-# `lm-evaluation-harness` + `promptsource`
-
-![](https://github.com/EleutherAI/lm-evaluation-harness/workflows/Build/badge.svg)
-[![codecov](https://codecov.io/gh/EleutherAI/lm-evaluation-harness/branch/master/graph/badge.svg?token=JSG3O2427J)](https://codecov.io/gh/EleutherAI/lm-evaluation-harness)
+# `lm-evaluation-harness` + `promptsource` for BLOOM+1
 
 ## Multilingual Modeling
 
-### XNLI (Example shown using 3 templates)
+Here shows the evaluation code for XNLI zero-shot prompting. You can find it in `./examples/`. 
+
 **Baseline or Model-Based (BitFit, FISH Mask, etc.)**
 ```
-python3 main.py \
---model_api_name "hf-causal" \
---model_args pretrained="bigscience/bloom-560m" \
---task_name "xnli_en" \
---template_names "take the following as truth","does this imply","GPT-3 style" \
---device "cpu"
+python3 lm-evaluation-harness/main.py \
+--model bigscience \
+--model_args tokenizer="bigscience/bloom-560m",pretrained="ZYONG2/saved_models/bloom-560m_de_bitfit_100000samples_-1vocab_original-frozen" \
+--tasks xnli_de
 ```
 
 **Using Adapters (MAD-X, Pfeiffer, IA3, LoRA, etc.)**
 ```
-python3 main.py \
---model_api_name "hf-causal" \
---model_args pretrained="bigscience/bloom-560m",lang_adapter_dir="/users/zyong2/data/zyong2/bigscience/data/processed/024/bloom350m_az_ia3_100000samples_-1vocab_original-frozen/oscar_ia3_az" \
---task_name "xnli_en" \
---template_names "take the following as truth","does this imply","GPT-3 style" \
---device "cpu"
+python3 m-evaluation-harness/main.py \
+--model bigscience \
+--model_args tokenizer="bigscience/bloom-560m",pretrained="bigscience/bloom-560m",adapter_ckpt_folder="ZYONG2/saved_models/bloom-560m_de_ia3_100000samples_-1vocab_original-frozen/oscar_ia3_de" \
+--tasks xnli_de
 ```
 
-### XLSUM (Example shown using 2 templates)
-**Baseline or Model-Based (BitFit, FISH Mask, etc.)**
-```
-python3 main.py \
---model_api_name "hf-causal" \
---model_args pretrained="bigscience/bloom-560m" \
---task_name "xlsum_azerbaijani" \
---template_names "write_abstract_az","rephrase_az" \
---device cpu
-```
-
-**Using Adapters (MAD-X, Pfeiffer, IA3, LoRA, etc.)**
-```
-python3 main.py \
---model_api_name "hf-causal" \
---model_args pretrained="bigscience/bloom-560m",lang_adapter_dir="/users/zyong2/data/zyong2/bigscience/data/processed/024/bloom-350m_az_ia3_100000samples_-1vocab_original-frozen/oscar_ia3_az" \
---task_name "xlsum_azerbaijani" \
---template_names "write_abstract_az","rephrase_az" \
---device cpu
-```
-
-
+---
+# (EleutherAI) Original lm-eval-harness README
 ## Overview
 
 This project provides a unified framework to test causal (GPT-2, GPT-3, GPTNeo, etc) and seq2seq (T5, T0) language models via prompt evaluation.
